@@ -45,12 +45,12 @@ function QuizPage() {
       try {
         const tags = searchParams.get('tags')?.split(',').filter(Boolean) || []
         const questionCount = parseInt(searchParams.get('questionCount') || '10')
-        
+
         const result = await startQuizMutation.mutateAsync({
           tags,
           questionCount
         })
-        
+
         setQuizState(prev => ({
           ...prev,
           sessionId: result.sessionId,
@@ -62,6 +62,7 @@ function QuizPage() {
         }))
       } catch (error) {
         console.error('Failed to start quiz:', error)
+        setError(error instanceof Error ? error.message : 'Failed to start quiz')
       }
     }
 
@@ -103,7 +104,7 @@ function QuizPage() {
 
     try {
       const result = await nextQuestionMutation.mutateAsync(quizState.sessionId)
-      
+
       setQuizState(prev => ({
         ...prev,
         currentQuestion: result.currentQuestion,
@@ -126,7 +127,7 @@ function QuizPage() {
 
     try {
       const result = await previousQuestionMutation.mutateAsync(quizState.sessionId)
-      
+
       setQuizState(prev => ({
         ...prev,
         currentQuestion: result.currentQuestion,
@@ -144,10 +145,10 @@ function QuizPage() {
     }
   }
 
-  const isLoading = startQuizMutation.isPending || 
-                   submitAnswerMutation.isPending || 
-                   nextQuestionMutation.isPending || 
-                   previousQuestionMutation.isPending
+  const isLoading = startQuizMutation.isPending ||
+    submitAnswerMutation.isPending ||
+    nextQuestionMutation.isPending ||
+    previousQuestionMutation.isPending
 
   if (startQuizMutation.isPending) {
     return (
@@ -203,7 +204,7 @@ function QuizPage() {
         <div className="space-y-3">
           {quizState.currentQuestion.options.map((option, index) => {
             let optionClass = "block w-full p-4 text-left border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            
+
             if (quizState.selectedOption === index) {
               if (quizState.showResult) {
                 if (index === quizState.currentQuestion!.correctAnswer) {
@@ -236,9 +237,8 @@ function QuizPage() {
 
         {/* Result Display */}
         {quizState.showResult && (
-          <div className={`mt-6 p-4 rounded-lg ${
-            quizState.isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
-          }`}>
+          <div className={`mt-6 p-4 rounded-lg ${quizState.isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
+            }`}>
             <div className="flex items-center mb-2">
               {quizState.isCorrect ? (
                 <svg className="h-5 w-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
