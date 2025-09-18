@@ -1,0 +1,20 @@
+{
+  "name": "danta-agentic-teaching",
+  "version": "1.0.0",
+  "description": "Full-stack MVP web app for course material upload and quiz generation",
+  "scripts": {
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "dev:all": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "build": "cd client && npm run build && cd ../server && npm run build",
+    "test": "cd server && npm test && cd ../client && npm test",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "client",
+    "server"
+  ]
+}
