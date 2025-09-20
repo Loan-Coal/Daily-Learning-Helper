@@ -1,6 +1,7 @@
-
 import prisma from '../prisma/client';
-import { getQuestions } from './pythonService';
+import { QuestionGenerationService } from './QuestionGenerationService';
+
+const questionGenService = new QuestionGenerationService();
 
 export interface QuizSessionResult {
   sessionId: string;
@@ -9,7 +10,7 @@ export interface QuizSessionResult {
   currentIndex: number;
 }
 
-export async function startQuizSession(tags: string[], questionCount: number): Promise<QuizSessionResult> {
+export async function startQuizSession(tags: string[], questionCount: number, userId?: string): Promise<QuizSessionResult> {
   // Fetch file IDs by tag (as before)
   let fileIds: string[] = [];
   if (tags.length > 0) {
@@ -20,10 +21,11 @@ export async function startQuizSession(tags: string[], questionCount: number): P
     fileIds = files.map((f: any) => f.id);
   }
 
-  // Use Python service to generate questions
+  // Use QuestionGenerationService to generate questions
   let questions;
   try {
-    questions = await getQuestions(tags, questionCount);
+    const questionSet = await questionGenService.generate(tags, userId || 'mock-user');
+    questions = questionSet.questions.slice(0, questionCount);
   } catch (err: any) {
     throw new Error(`Failed to generate quiz questions: ${err.message || err}`);
   }

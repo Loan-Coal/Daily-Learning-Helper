@@ -18,22 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// API response type for consistency
-interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: {
-    code: string;
-    message: string;
-  };
-}
-
-// Utility function to create API responses
-const createResponse = <T>(success: boolean, data?: T, error?: { code: string; message: string }): ApiResponse<T> => ({
-  success,
-  data,
-  error
-});
+import { createResponse } from './utils/createResponse';
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -43,9 +28,23 @@ app.get('/api/health', (req, res) => {
 // Import route handlers
 import fileRoutes from './routes/files';
 import quizRoutes from './routes/quiz';
+import authRoutes from './routes/auth';
+import calendarRoutes from './routes/calendarRoutes';
+import eventTagMappingRoutes from './routes/eventTagMappingRoutes';
+import tagRecommendationRoutes from './routes/tagRecommendationRoutes';
+import { startQuizReminderScheduler } from './services/schedulerService';
+import { authenticate } from './middleware/authMiddleware';
 
 app.use('/api', fileRoutes);
 app.use('/api', quizRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/calendar-events', authenticate, calendarRoutes);
+app.use('/api/event-tag-mappings', authenticate, eventTagMappingRoutes);
+app.use('/api/tags', authenticate, tagRecommendationRoutes);
+
+// Start the quiz reminder scheduler (set your quiz page URL here)
+const QUIZ_PAGE_URL = process.env.QUIZ_PAGE_URL || 'http://localhost:3000/quiz';
+startQuizReminderScheduler(QUIZ_PAGE_URL);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

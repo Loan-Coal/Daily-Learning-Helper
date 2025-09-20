@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QuestionSet",
+  "type": "object",
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1.0" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "source": { "type": "string", "enum": ["mock", "llm"] },
+    "metadata": { "type": "object", "additionalProperties": true },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "question": { "type": "string" },
+          "options": { "type": "array", "items": { "type": "string" }, "minItems": 2 },
+          "correctAnswer": { "type": "number" },
+          "explanation": { "type": "string" },
+          "difficulty": { "type": "string", "enum": ["easy", "medium", "hard"], "nullable": true },
+          "tagIds": { "type": "array", "items": { "type": "string" }, "nullable": true }
+        },
+        "required": ["id", "question", "options", "correctAnswer", "explanation"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["schemaVersion", "tags", "source", "questions"],
+  "additionalProperties": false
+}

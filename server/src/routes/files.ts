@@ -41,21 +41,7 @@ const upload = multer({
   }
 });
 
-// API response utility
-interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: {
-    code: string;
-    message: string;
-  };
-}
-
-const createResponse = <T>(success: boolean, data?: T, error?: { code: string; message: string }): ApiResponse<T> => ({
-  success,
-  data,
-  error
-});
+import { createResponse } from '../utils/createResponse';
 
 // POST /api/files - Upload PDF files
 router.post('/files', upload.array('files'), async (req, res) => {

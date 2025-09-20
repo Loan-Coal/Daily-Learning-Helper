@@ -23,3 +23,17 @@ export async function getQuestions(tags: string[], questionCount: number): Promi
     throw error;
   }
 }
+
+export const runPythonQuestionGen = (tags: string[], userId: string, schemaVersion: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const scriptPath = path.resolve(__dirname, '../../../python/generate_questions.py');
+    const args = [JSON.stringify(tags), userId, schemaVersion];
+    execFile('python', [scriptPath, ...args], (error, stdout, stderr) => {
+      if (error) {
+        reject(new Error(stderr || error.message));
+      } else {
+        resolve(stdout);
+      }
+    });
+  });
+};

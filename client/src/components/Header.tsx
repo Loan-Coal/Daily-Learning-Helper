@@ -1,21 +1,22 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom';
+import Navbar from './Navbar';
 
 function Header() {
-  const location = useLocation()
+  const location = useLocation();
 
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/upload', label: 'Upload' },
     { path: '/library', label: 'Library' },
     { path: '/quiz', label: 'Quiz' },
-  ]
+  ];
 
   const isActive = (path: string) => {
     if (path === '/') {
-      return location.pathname === '/'
+      return location.pathname === '/';
     }
-    return location.pathname.startsWith(path)
-  }
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <header className="bg-white shadow-sm border-b">
@@ -24,7 +25,6 @@ function Header() {
           <Link to="/" className="text-xl font-bold text-primary-600">
             Danta Teaching
           </Link>
-          
           <nav className="flex space-x-8">
             {navItems.map((item) => (
               <Link
@@ -40,10 +40,13 @@ function Header() {
               </Link>
             ))}
           </nav>
+          <div className="ml-6">
+            <Navbar />
+          </div>
         </div>
       </div>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;

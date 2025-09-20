@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "tags": ["math"],
+  "source": "mock",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is 2 + 2?",
+      "options": ["3", "4", "5", "6"],
+      "correctAnswer": 1,
+      "explanation": "2 + 2 = 4.",
+      "difficulty": "easy",
+      "tagIds": ["math"]
+    }
+  ]
+}

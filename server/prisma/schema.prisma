@@ -10,15 +10,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+model User {
+  id               String   @id @default(cuid())
+  email            String   @unique
+  passwordHash     String
+  quizReminderTime String   // HH:mm format
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  calendarEvents   CalendarEvent[]    // relation to CalendarEvent
+  eventTagMappings EventTagMapping[]  // relation to EventTagMapping
+}
+
 model File {
-  id           String   @id @default(cuid())
-  originalName String
-  storedPath   String
-  size         Int
-  mimeType     String
-  tags         String   // JSON array as string
-  uploadedAt   DateTime @default(now())
-  
+  id               String   @id @default(cuid())
+  originalName     String
+  storedPath       String
+  size             Int
+  mimeType         String
+  tags             String   // JSON array as string
+  uploadedAt       DateTime @default(now())
+  processedSummary String?  // JSON string with preprocessed summary
+
   @@map("files")
 }
 
@@ -32,4 +45,31 @@ model QuizSession {
   answers       String   @default("[]") // JSON array of user answers
   
   @@map("quiz_sessions")
+}
+
+model CalendarEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  source      String   // "google" | "outlook" | "ics"
+  externalId  String?  // ID from external provider
+  title       String
+  description String?
+  start       DateTime
+  end         DateTime
+  rawJSON     String?  // Store raw event data if needed
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model EventTagMapping {
+  id          String   @id @default(cuid())
+  userId      String
+  patternType String   // "exact" | "contains" | "regex"
+  pattern     String
+  tagId       String
+  priority    Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])
 }

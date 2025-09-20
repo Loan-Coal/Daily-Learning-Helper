@@ -1,17 +1,24 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../middleware/authMiddleware';
 import { startQuizSession } from '../services/quizService';
 import { createResponse } from '../utils/createResponse';
 
-export async function startQuiz(req: Request, res: Response) {
+export async function startQuiz(req: AuthRequest, res: Response) {
   try {
     const { tags = [], questionCount = 10 } = req.body;
+    let userId: string | undefined = undefined;
+    if (typeof req.user?.id === 'string') {
+      userId = req.user.id;
+    } else if (typeof req.body.userId === 'string') {
+      userId = req.body.userId;
+    }
     if (!Array.isArray(tags) || typeof questionCount !== 'number') {
       return res.status(400).json(createResponse(false, null, {
         code: 'INVALID_INPUT',
         message: 'tags must be an array and questionCount a number'
       }));
     }
-    const result = await startQuizSession(tags, questionCount);
+    const result = await startQuizSession(tags, questionCount, userId || 'mock-user');
     return res.json(createResponse(true, result));
   } catch (error) {
     console.error('Start quiz error:', error);
@@ -22,9 +29,9 @@ export async function startQuiz(req: Request, res: Response) {
   }
 }
 
-export async function submitAnswer(req: Request, res: Response) {
+export async function submitAnswer(req: AuthRequest, res: Response) {
   try {
-    const { sessionId, questionIndex, selectedOption } = req.body;
+  const { sessionId, questionIndex, selectedOption } = req.body || {};
     if (!sessionId || questionIndex === undefined || selectedOption === undefined) {
       return res.status(400).json(createResponse(false, null, {
         code: 'MISSING_FIELDS',
@@ -42,9 +49,9 @@ export async function submitAnswer(req: Request, res: Response) {
   }
 }
 
-export async function nextQuestion(req: Request, res: Response) {
+export async function nextQuestion(req: AuthRequest, res: Response) {
   try {
-    const { sessionId } = req.body;
+  const { sessionId } = req.body || {};
     if (!sessionId) {
       return res.status(400).json(createResponse(false, null, {
         code: 'MISSING_SESSION_ID',
@@ -62,9 +69,9 @@ export async function nextQuestion(req: Request, res: Response) {
   }
 }
 
-export async function prevQuestion(req: Request, res: Response) {
+export async function prevQuestion(req: AuthRequest, res: Response) {
   try {
-    const { sessionId } = req.body;
+  const { sessionId } = req.body || {};
     if (!sessionId) {
       return res.status(400).json(createResponse(false, null, {
         code: 'MISSING_SESSION_ID',
@@ -82,9 +89,9 @@ export async function prevQuestion(req: Request, res: Response) {
   }
 }
 
-export async function getQuizSession(req: Request, res: Response) {
+export async function getQuizSession(req: AuthRequest, res: Response) {
   try {
-    const { sessionId } = req.params;
+  const { sessionId } = req.params || {};
     if (!sessionId) {
       return res.status(400).json(createResponse(false, null, {
         code: 'MISSING_SESSION_ID',

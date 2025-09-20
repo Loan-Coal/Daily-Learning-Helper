@@ -1,3 +1,6 @@
+/**
+ * Question interface for quiz questions
+ */
 export interface Question {
   id: number;
   question: string;

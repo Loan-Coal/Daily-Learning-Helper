@@ -1,23 +1,41 @@
-import { Routes, Route } from 'react-router-dom'
-import Layout from './components/Layout'
-import WelcomePage from './pages/WelcomePage'
-import UploadPage from './pages/UploadPage'
-import LibraryPage from './pages/LibraryPage'
-import QuizLandingPage from './pages/QuizLandingPage'
-import QuizPage from './pages/QuizPage'
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Upload from './pages/Upload';
+import Library from './pages/Library';
+import Quiz from './pages/Quiz';
+import CalendarMap from './pages/CalendarMap';
+import Auth from './pages/Auth';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<WelcomePage />} />
-        <Route path="/upload" element={<UploadPage />} />
-        <Route path="/library" element={<LibraryPage />} />
-        <Route path="/quiz" element={<QuizLandingPage />} />
-        <Route path="/quiz/take" element={<QuizPage />} />
-      </Routes>
-    </Layout>
-  )
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/calendar" element={<CalendarMap />} />
+          <Route path="/upload" element={
+            <PrivateRoute>
+              <Upload />
+            </PrivateRoute>
+          } />
+          <Route path="/library" element={
+            <PrivateRoute>
+              <Library />
+            </PrivateRoute>
+          } />
+          <Route path="/quiz" element={
+            <PrivateRoute>
+              <Quiz />
+            </PrivateRoute>
+          } />
+        </Routes>
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
