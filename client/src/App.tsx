@@ -8,6 +8,10 @@ import CalendarMap from './pages/CalendarMap';
 import Auth from './pages/Auth';
 import PrivateRoute from './components/PrivateRoute';
 
+// Placeholder for QuizSessionPage
+import React from 'react';
+const QuizSessionPage = React.lazy(() => import('./pages/QuizSessionPage'));
+
 function App() {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -32,6 +36,7 @@ function App() {
               <Quiz />
             </PrivateRoute>
           } />
+          <Route path="/quiz/session/:sessionId" element={<QuizSessionPage />} />
         </Routes>
       </div>
     </div>

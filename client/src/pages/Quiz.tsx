@@ -20,8 +20,8 @@ const Quiz: React.FC = () => {
       axios.get('/tags').catch(() => ({ data: [] })),
     ])
       .then(([recRes, allRes]) => {
-        setTags(recRes.data || []);
-        setAllTags(allRes.data || []);
+        setTags(recRes.data?.data || []);
+        setAllTags(allRes.data?.data || []);
       })
       .catch(() => setError('Failed to load tags.'))
       .finally(() => setLoading(false));
@@ -37,8 +37,8 @@ const Quiz: React.FC = () => {
       if (questionCount.trim() !== '') {
         payload.questionCount = Number(questionCount);
       }
-      const { data } = await axios.post('/quiz/start', payload);
-      navigate(`/quiz/session/${data.sessionId}`);
+      const { data } = await axios.post('/api/quiz/start', payload);
+      navigate(`/quiz/session/${data.data.sessionId}`);
     } catch (e) {
       setError('Failed to start quiz.');
     } finally {

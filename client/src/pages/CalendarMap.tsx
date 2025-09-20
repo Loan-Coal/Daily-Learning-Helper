@@ -11,11 +11,11 @@ const CalendarMap: React.FC = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Calendar Events</h1>
-      {(!data || data.length === 0) ? (
+      {(!data?.data || data.data.length === 0) ? (
         <div className="text-gray-500">No events found.</div>
       ) : (
         <ul className="space-y-4">
-          {data.map((event: any) => (
+          {data.data.map((event: any) => (
             <li key={event.id} className="bg-white rounded shadow p-4">
               <div className="font-semibold">{event.title}</div>
               <div className="text-gray-500 text-sm">{formatDate(event.date)}</div>

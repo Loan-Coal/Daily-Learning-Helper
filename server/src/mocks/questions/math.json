@@ -11,6 +11,87 @@
       "explanation": "2 + 2 = 4.",
       "difficulty": "easy",
       "tagIds": ["math"]
+    },
+    {
+      "id": 2,
+      "question": "What is the square root of 9?",
+      "options": ["1", "2", "3", "4"],
+      "correctAnswer": 2,
+      "explanation": "The square root of 9 is 3.",
+      "difficulty": "easy",
+      "tagIds": ["math"]
+    },
+    {
+      "id": 3,
+      "question": "What is 10 divided by 2?",
+      "options": ["2", "3", "4", "5"],
+      "correctAnswer": 3,
+      "explanation": "10 divided by 2 is 5.",
+      "difficulty": "easy",
+      "tagIds": ["math"]
+    },
+    {
+      "id": 4,
+      "question": "What is the value of pi (π) rounded to two decimal places?",
+      "options": ["3.14", "2.72", "1.62", "3.33"],
+      "correctAnswer": 0,
+      "explanation": "Pi rounded to two decimal places is 3.14.",
+      "difficulty": "medium",
+      "tagIds": ["math"]
+    },
+    {
+      "id": 5,
+      "question": "What is 7 x 6?",
+      "options": ["36", "42", "48", "56"],
+      "correctAnswer": 1,
+      "explanation": "7 times 6 is 42.",
+      "difficulty": "easy",
+      "tagIds": ["math"]
+    },
+    {
+      "id": 6,
+      "question": "What is the next prime number after 5?",
+      "options": ["6", "7", "8", "9"],
+      "correctAnswer": 1,
+      "explanation": "The next prime after 5 is 7.",
+      "difficulty": "medium",
+      "tagIds": ["math"]
+    },
+    {
+      "id": 7,
+      "question": "What is 15% of 200?",
+      "options": ["20", "25", "30", "35"],
+      "correctAnswer": 2,
+      "explanation": "15% of 200 is 30.",
+      "difficulty": "medium",
+      "tagIds": ["math"]
+    },
+    {
+      "id": 8,
+      "question": "What is the result of 3^3?",
+      "options": ["6", "9", "27", "81"],
+      "correctAnswer": 2,
+      "explanation": "3 to the power of 3 is 27.",
+      "difficulty": "medium",
+      "tagIds": ["math"]
+    },
+    {
+      "id": 9,
+      "question": "What is the derivative of x^2?",
+      "options": ["x", "2x", "x^2", "2"],
+      "correctAnswer": 1,
+      "explanation": "The derivative of x^2 is 2x.",
+      "difficulty": "hard",
+      "tagIds": ["math"]
+    },
+    {
+      "id": 10,
+      "question": "What is the sum of the angles in a triangle?",
+      "options": ["90°", "180°", "270°", "360°"],
+      "correctAnswer": 1,
+      "explanation": "The sum of the angles in a triangle is 180°.",
+      "difficulty": "easy",
+      "tagIds": ["math"]
     }
   ]
 }

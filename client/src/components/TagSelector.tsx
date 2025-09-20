@@ -18,7 +18,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({ value, onChange }) => {
     }
     setLoading(true);
     axios.get(`/tags?search=${input}`)
-      .then(res => setSuggestions(res.data))
+      .then(res => setSuggestions(res.data?.data || []))
       .finally(() => setLoading(false));
   }, [input]);
 
