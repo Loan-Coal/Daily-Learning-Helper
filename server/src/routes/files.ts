@@ -47,7 +47,24 @@ import { createResponse } from '../utils/createResponse';
 router.post('/files', upload.array('files'), async (req, res) => {
   try {
     const files = req.files as Express.Multer.File[];
-    const tags = req.body.tags ? req.body.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean) : [];
+    let tags: string[] = [];
+    if (Array.isArray(req.body.tags)) {
+      tags = req.body.tags.map((tag: string) => tag.trim()).filter(Boolean);
+    } else if (typeof req.body.tags === 'string') {
+      try {
+        // Try to parse as JSON array
+        const parsed = JSON.parse(req.body.tags);
+        if (Array.isArray(parsed)) {
+          tags = parsed.map((tag: string) => tag.trim()).filter(Boolean);
+        } else {
+          // Fallback to comma-separated string
+          tags = req.body.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean);
+        }
+      } catch {
+        // Fallback to comma-separated string
+        tags = req.body.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean);
+      }
+    }
     
     if (!files || files.length === 0) {
       return res.status(400).json(createResponse(false, null, {

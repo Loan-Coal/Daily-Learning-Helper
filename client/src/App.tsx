@@ -21,6 +21,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/calendar" element={<CalendarMap />} />
+          <Route path="/calendar-map" element={<CalendarMap />} />
           <Route path="/upload" element={
             <PrivateRoute>
               <Upload />
