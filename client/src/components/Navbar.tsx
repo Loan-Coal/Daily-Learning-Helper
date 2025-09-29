@@ -20,7 +20,9 @@ const Navbar: React.FC = () => {
             <Link to="/library" className="hover:text-blue-600">Library</Link>
             <Link to="/quiz" className="hover:text-blue-600">Quiz</Link>
             <Link to="/upload" className="hover:text-blue-600">Upload</Link>
+            {/* TEMPORARILY DISABLED - Calendar link will be restored in future update
             <Link to="/calendar-map" className="hover:text-blue-600">Calendar</Link>
+            */}
           </>
         )}
         {user ? (

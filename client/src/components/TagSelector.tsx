@@ -23,11 +23,19 @@ const TagSelector: React.FC<TagSelectorProps> = ({ value, onChange }) => {
   }, [input]);
 
   const addTag = (tag: string) => {
-    if (!value.includes(tag)) {
-      onChange([...value, tag]);
+    const trimmedTag = tag.trim();
+    if (trimmedTag && !value.includes(trimmedTag)) {
+      onChange([...value, trimmedTag]);
     }
     setInput('');
     setSuggestions([]);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && input.trim()) {
+      e.preventDefault();
+      addTag(input.trim());
+    }
   };
 
   const removeTag = (tag: string) => {
@@ -48,7 +56,8 @@ const TagSelector: React.FC<TagSelectorProps> = ({ value, onChange }) => {
         className="border rounded px-2 py-1 w-full"
         value={input}
         onChange={e => setInput(e.target.value)}
-        placeholder="Add tag..."
+        onKeyDown={handleKeyDown}
+        placeholder="Add tag... (Press Enter to add)"
       />
       {loading && <div className="text-xs text-gray-400 mt-1">Loading...</div>}
       {suggestions.length > 0 && (

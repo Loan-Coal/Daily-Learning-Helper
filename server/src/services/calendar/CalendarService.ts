@@ -1,4 +1,4 @@
-import { CalendarEvent } from '../../interfaces/CalendarEvent';
+import { CalendarEvent } from '../../../../shared/CalendarEvent';
 
 export interface CalendarProvider {
   fetchEvents(userId: string): Promise<CalendarEvent[]>;

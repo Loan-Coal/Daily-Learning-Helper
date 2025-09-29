@@ -1,4 +1,4 @@
-import { TagRecommendationStrategy, TagRecommendation } from '../TagRecommendationService';
+import { TagRecommendationStrategy, TagRecommendation } from '../../providers/TagRecommendationService';
 
 export class RosterStrategy implements TagRecommendationStrategy {
   async recommendTags(userId: string): Promise<TagRecommendation[]> {

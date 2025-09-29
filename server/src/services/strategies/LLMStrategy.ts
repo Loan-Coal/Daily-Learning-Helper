@@ -1,4 +1,4 @@
-import { QuestionSet } from '../../interfaces/QuestionSet';
+import { QuestionSet } from '../../../../shared/QuestionSet';
 import { runPythonQuestionGen } from '../pythonService';
 
 export class LLMStrategy {

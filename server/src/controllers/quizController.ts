@@ -6,20 +6,36 @@ import { createResponse } from '../utils/createResponse';
 export async function startQuiz(req: AuthRequest, res: Response) {
   try {
     const { tags = [], questionCount = 10 } = req.body;
-    let userId: string | undefined = undefined;
-    if (typeof req.user?.id === 'string') {
-      userId = req.user.id;
-    } else if (typeof req.body.userId === 'string') {
-      userId = req.body.userId;
-    }
+    
+    // Get user ID and auth token
+    const userId = req.user?.id || 'anonymous';
+    const authToken = req.headers.authorization?.replace('Bearer ', '') || '';
+    
     if (!Array.isArray(tags) || typeof questionCount !== 'number') {
       return res.status(400).json(createResponse(false, null, {
         code: 'INVALID_INPUT',
         message: 'tags must be an array and questionCount a number'
       }));
     }
-    const result = await startQuizSession(tags, questionCount, userId || 'mock-user');
-    return res.json(createResponse(true, result));
+
+    if (tags.length === 0) {
+      return res.status(400).json(createResponse(false, null, {
+        code: 'MISSING_TAGS',
+        message: 'At least one tag is required for quiz generation'
+      }));
+    }
+
+    console.log(`Starting quiz for user ${userId} with tags: ${tags.join(', ')}`);
+    
+    const result = await startQuizSession(tags, questionCount, userId, authToken);
+    
+    return res.json(createResponse(true, {
+      ...result,
+      message: result.generationStatus === 'fallback' 
+        ? 'Using backup questions - AI generation temporarily unavailable'
+        : 'Questions generated successfully'
+    }));
+
   } catch (error) {
     console.error('Start quiz error:', error);
     return res.status(500).json(createResponse(false, null, {

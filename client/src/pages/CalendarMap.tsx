@@ -16,7 +16,6 @@ const CalendarMap: React.FC = () => {
   const {
     data: user,
     isLoading: userLoading,
-    error: userError,
   } = useQuery(['me'], getMe);
 
   const [reminderTime, setReminderTimeState] = useState('');

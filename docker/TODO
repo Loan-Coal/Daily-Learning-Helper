@@ -1,0 +1,5 @@
+should have server dockerfile, 
+python quest gen dockerfile
+python summarizer dockerfile
+python embediong dockerfile
+will need a docker compose.yml in dantagenticteaching

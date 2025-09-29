@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import prisma from '../prisma/client';
-import { sendQuizReminderEmail } from './emailService';
+import { sendQuizReminderEmail } from '../providers/emailService';
 
 // Helper to get current time in HH:mm (24h) format
 function getCurrentTimeHHMM(): string {

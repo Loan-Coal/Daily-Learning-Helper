@@ -17,9 +17,14 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 // Configure multer for file uploads
+const uploadsDir = path.join(__dirname, '../../uploads');
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    cb(null, path.join(__dirname, '../../uploads'));
+    // Ensure directory exists
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+    cb(null, uploadsDir);
   },
   filename: (_req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -81,14 +86,31 @@ router.post('/files', upload.array('files'), async (req, res) => {
         const pdfBuffer = fs.readFileSync(file.path);
         const pdfData = await pdfParse(pdfBuffer);
         
+        // Ensure a default user exists
+        let defaultUser = await prisma.user.findFirst({
+          where: { email: 'default@example.com' }
+        });
+        
+        if (!defaultUser) {
+          defaultUser = await prisma.user.create({
+            data: {
+              email: 'default@example.com',
+              passwordHash: 'default-hash', // In a real app, this would be properly hashed
+              quizReminderTime: '09:00'
+            }
+          });
+        }
+        
         // Save file metadata to database
         const savedFile = await prisma.file.create({
           data: {
             originalName: file.originalname,
+            filename: file.filename, // stored filename from multer
             storedPath: file.path,
             size: file.size,
             mimeType: file.mimetype,
             tags: JSON.stringify(tags),
+            userId: defaultUser.id,
           }
         });
 

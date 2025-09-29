@@ -1,4 +1,4 @@
-import { QuestionSet } from '../../interfaces/QuestionSet';
+import { QuestionSet } from '../../../../shared/QuestionSet';
 import fs from 'fs';
 import path from 'path';
 

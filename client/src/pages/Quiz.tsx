@@ -29,18 +29,38 @@ const Quiz: React.FC = () => {
 
   const handleStartQuiz = async () => {
     setStarting(true);
+    
     try {
-      // If no tags selected, send all tags
-      const tagsToSend = tags.length === 0 ? allTags : tags;
-      // Only send questionCount if user entered a value
-      const payload: any = { tags: tagsToSend };
-      if (questionCount.trim() !== '') {
-        payload.questionCount = Number(questionCount);
+      // Validate inputs
+      let tagsToSend = tags.length > 0 ? tags : [];
+      
+      // If no tags selected and we have allTags, use first 3
+      if (tagsToSend.length === 0 && allTags.length > 0) {
+        tagsToSend = allTags.slice(0, 3);
       }
-      const { data } = await axios.post('/api/quiz/start', payload);
-      navigate(`/quiz/session/${data.data.sessionId}`);
+      
+      // If still no tags, provide default fallback tags
+      if (tagsToSend.length === 0) {
+        tagsToSend = ['science', 'math', 'general']; // Always have fallback tags
+      }
+      
+      const finalQuestionCount = questionCount.trim() !== '' ? Number(questionCount) : 5;
+
+      // Generate a temporary ID for the loading page
+      const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Navigate to generating page with parameters
+      const params = new URLSearchParams({
+        tags: tagsToSend.join(','),
+        questionCount: finalQuestionCount.toString(),
+        tempId
+      });
+      
+      navigate(`/quiz/generating?${params.toString()}`);
+      
     } catch (e) {
-      setError('Failed to start quiz.');
+      console.error('Failed to start quiz generation:', e);
+      setError('Failed to start quiz generation. Please try again.');
     } finally {
       setStarting(false);
     }

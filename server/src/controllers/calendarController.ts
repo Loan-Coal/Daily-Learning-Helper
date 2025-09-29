@@ -1,9 +1,9 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/authMiddleware';
 import { CalendarService } from '../services/calendar/CalendarService';
-import { GoogleProvider } from '../services/calendar/GoogleProvider';
-import { OutlookProvider } from '../services/calendar/OutlookProvider';
-import { ICSProvider } from '../services/calendar/ICSProvider';
+import { GoogleProvider } from '../providers/calendar/GoogleProvider';
+import { OutlookProvider } from '../providers/calendar/OutlookProvider';
+import { ICSProvider } from '../providers/calendar/ICSProvider';
 
 const calendarService = new CalendarService([
   new GoogleProvider(),

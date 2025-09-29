@@ -18,6 +18,7 @@ model User {
   quizReminderTime String   // HH:mm format
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  files            File[]             // relation to File
   calendarEvents   CalendarEvent[]    // relation to CalendarEvent
   eventTagMappings EventTagMapping[]  // relation to EventTagMapping
 }
@@ -25,12 +26,21 @@ model User {
 model File {
   id               String   @id @default(cuid())
   originalName     String
+  filename         String   // stored filename
   storedPath       String
   size             Int
   mimeType         String
   tags             String   // JSON array as string
+  userId           String   // owner of the file
+  isProcessed      Boolean  @default(false)
+  processedAt      DateTime?
   uploadedAt       DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
   processedSummary String?  // JSON string with preprocessed summary
+
+  user             User     @relation(fields: [userId], references: [id])
+  chunks           DocumentChunk[]
 
   @@map("files")
 }
@@ -72,4 +82,36 @@ model EventTagMapping {
   createdAt   DateTime @default(now())
 
   user        User     @relation(fields: [userId], references: [id])
+}
+
+model DocumentChunk {
+  id          String   @id @default(cuid())
+  fileId      String
+  content     String   // SQLite doesn't need @db.Text
+  startIndex  Int
+  endIndex    Int
+  chunkIndex  Int
+  metadata    String   // JSON object as string
+  createdAt   DateTime @default(now())
+  
+  file        File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  
+  @@index([fileId])
+  @@index([chunkIndex])
+}
+
+model GeneratedQuestionSet {
+  id          String   @id @default(cuid())
+  sessionId   String   @unique
+  questions   String   // JSON array of generated questions (SQLite doesn't need @db.Text)
+  sourceChunks String  // JSON array of chunk IDs used (SQLite doesn't need @db.Text)
+  tags        String   // JSON array of tags used for generation
+  questionCount Int
+  difficulty  String?  // easy, medium, hard, mixed
+  status      String   @default("generating") // generating, ready, failed
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([sessionId])
+  @@index([status])
 }
